@@ -1,0 +1,8 @@
+# web/config.yml
+
+# Jetty server configuration
+web:
+  #make sure this is portfowarded
+  port: 8228
+  #to match all paths to this do /*
+  path: "/"

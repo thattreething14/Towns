@@ -1,0 +1,59 @@
+name: Towns
+version: '${project.version}'
+main: site.albaniacraft.towns.Towns
+api-version: 1.20
+description: >
+  Multipurpose plugin made for a Wild West server. Please do not use without permission but uh if you're reading this you either got it from somebody with the intention of pirating or i gave it to you so uh don't use it please?.
+  Note: sql support is available--bulk file hosting soon maybe?.
+author: thattreething14
+commands:
+  town:
+    description: Manage towns.
+    usage: /town <subcommand>
+    aliases: [t]
+
+permissions:
+  Towns.admin:
+    description: Full admin control over towns.
+    default: op
+    children:
+      - Towns.new
+      - Towns.delete
+      - Towns.invite
+      - Towns.accept
+      - Towns.deny
+      - Towns.info
+      - Towns.claim
+      - Towns.unclaim
+      - Towns.coinsgive
+      - Towns.leave
+  Towns.new:
+    description: Permission to use the /town new command.
+    default: op
+  Towns.delete:
+    description: Permission to use the /town delete command.
+    default: op
+  Towns.invite:
+    description: Permission to use the /town invite command.
+    default: op
+  Towns.accept:
+    description: Permission to use the /town accept command.
+    default: op
+  Towns.deny:
+    description: Permission to use the /town deny command.
+    default: op
+  Towns.info:
+    description: Permission to use the /town info command.
+    default: op
+  Towns.claim:
+    description: Permission to use the /town claim command.
+    default: op
+  Towns.unclaim:
+    description: Permission to use the /town unclaim command.
+    default: op
+  Towns.coinsgive:
+    description: Permission to use the /town coinsgive command.
+    default: op
+  Towns.leave:
+    description: Permission to use the /town leave command.
+    default: op
