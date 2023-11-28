@@ -30,7 +30,7 @@ class TownAcceptDenyCommand(
             return true
         }
 
-        val subCommand = args[0].toLowerCase() // Convert to lowercase for case-insensitive comparison
+        val subCommand = args[0].toLowerCase()
         if (subCommand.equals("accept", ignoreCase = true) || subCommand.equals("deny", ignoreCase = true)) {
             if (args.size != 2) {
                 sender.sendMessage(ChatColor.RED.toString() + "Usage: /town $subCommand <townName>")
@@ -45,7 +45,7 @@ class TownAcceptDenyCommand(
                 return true
             }
             if (System.currentTimeMillis() - invitation.timestamp > 60000) {
-                // Invitation has expired (1 minute = 60000 milliseconds)
+     
                 sender.sendMessage(ChatColor.RED.toString() + "The invitation has expired.")
                 removePendingInvitation(playerName)
                 return true
@@ -104,20 +104,20 @@ class TownAcceptDenyCommand(
         val invitation = getPendingInvitation(playerName)
 
         if (invitation == null) {
-            // No pending invitation to accept
+  
             val sender = Bukkit.getPlayerExact(playerName)
             sender?.sendMessage(ChatColor.RED.toString() + "No pending invitation to accept.")
             return
         }
 
         if (invitation.townName != townName) {
-            // Mismatched invitation
+  
             val sender = Bukkit.getPlayerExact(invitation.senderName)
             sender?.sendMessage(ChatColor.RED.toString() + "Invalid or mismatched invitation to join the town.")
             return
         }
 
-        // Add the invited player to the town in the database
+
         if (townManager.addPlayerToTown(playerName, townName)) {
             val sender = Bukkit.getPlayerExact(invitation.senderName)
 
@@ -125,7 +125,7 @@ class TownAcceptDenyCommand(
                 sender.sendMessage(ChatColor.GREEN.toString() + "$playerName has accepted the invitation to join the town $townName.")
             }
 
-            // Notify all town members about the new player joining
+     
             val town = townManager.getTown(townName)
             town.members.forEach { memberName ->
                 val member = Bukkit.getPlayerExact(memberName)
@@ -135,7 +135,7 @@ class TownAcceptDenyCommand(
             }
         }
 
-        // Remove the pending invitation after it's accepted
+
         removePendingInvitation(playerName)
     }
 
@@ -143,7 +143,7 @@ class TownAcceptDenyCommand(
         val invitation = getPendingInvitation(playerName)
 
         if (invitation == null) {
-            // No pending invitation to deny
+
             val sender = Bukkit.getPlayerExact(playerName)
             sender?.sendMessage(ChatColor.RED.toString() + "No pending invitation to deny.")
             return
@@ -162,7 +162,7 @@ class TownAcceptDenyCommand(
             sender.sendMessage(ChatColor.RED.toString() + "$playerName has denied the invitation to join the town $townName.")
         }
 
-        // Remove the pending invitation after it's denied
+ 
         removePendingInvitation(playerName)
     }
 
@@ -172,7 +172,4 @@ class TownAcceptDenyCommand(
         val senderName: String,
         val timestamp: Long
     )
-
-    // You may need to include your databaseManager here
-    // private val databaseManager: DatabaseManager
 }
