@@ -101,7 +101,6 @@ class TownManager(private val databaseManager: DatabaseManager) {
         val connection = databaseManager.getConnection()
 
         try {
-            // Insert the player-town association into the database
             val statement = connection.prepareStatement("INSERT INTO player_towns (player_name, town_name) VALUES (?, ?)")
             statement.setString(1, playerName)
             statement.setString(2, townName)
@@ -138,7 +137,7 @@ class TownManager(private val databaseManager: DatabaseManager) {
     fun getAdjacentClaimedChunks(townName: String, chunkX: Int, chunkZ: Int): List<Pair<Int, Int>> {
         val adjacentChunks = mutableListOf<Pair<Int, Int>>()
 
-        // Define the neighboring chunk coordinates
+        // gets adjacent coords
         val neighbors = arrayOf(
             Pair(chunkX - 1, chunkZ),
             Pair(chunkX + 1, chunkZ),
@@ -165,7 +164,6 @@ class TownManager(private val databaseManager: DatabaseManager) {
             statement.setString(1, townName)
             val resultSet = statement.executeQuery()
 
-            // If there is a result, a town with the same name already exists
             return resultSet.next()
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -183,7 +181,7 @@ class TownManager(private val databaseManager: DatabaseManager) {
             statement.setString(1, playerName)
             val resultSet = statement.executeQuery()
 
-            // If there is a result and the count is greater than 0, the player belongs to a town
+        
             if (resultSet.next()) {
                 val count = resultSet.getInt(1)
                 return count > 0
@@ -197,27 +195,27 @@ class TownManager(private val databaseManager: DatabaseManager) {
         }
     }
     fun storeTownInDatabase(town: Town): Boolean {
-        // Get a database connection
+
         val connection = databaseManager.getConnection()
 
         try {
-            // Insert the town into the database
+
             val statement = connection.prepareStatement("INSERT INTO towns (name, founder) VALUES (?, ?)")
             statement.setString(1, town.name)
             statement.setString(2, town.founder)
             statement.executeUpdate()
             statement.close()
 
-            // Store the player-town association
+
             databaseManager.storePlayerTownAssociation(town.founder, town.name)
 
-            // Store the town members in the database
+
             storeTownMembers(town)
 
-            return true // Return true indicating success
+            return true 
         } catch (e: Exception) {
             e.printStackTrace()
-            return false // Return false indicating failure
+            return false 
         } finally {
             connection.close()
         }
@@ -268,15 +266,15 @@ class TownManager(private val databaseManager: DatabaseManager) {
         val connection = databaseManager.getConnection()
 
         try {
-            // Check if the town exists in the towns table before claiming the chunk
+
             if (!townNameExists(townName)) {
-                // Handle the case when the town doesn't exist
+
                 return false
             }
 
-            // Check if the chunk is already claimed by the town
+    
             if (isChunkClaimedByTown(townName, chunkX, chunkZ)) {
-                // Handle the case when the chunk is already claimed
+     
                 return false
             }
 
@@ -322,13 +320,13 @@ class TownManager(private val databaseManager: DatabaseManager) {
 
         try {
 
-            // Delete claimed chunks associated with the town
+   
             val deleteChunksStatement = connection.prepareStatement("DELETE FROM chunks_claimed WHERE town_name = ?")
             deleteChunksStatement.setString(1, townName)
             deleteChunksStatement.executeUpdate()
             deleteChunksStatement.close()
 
-            // Delete player-town associations first
+            // Delete player-town 
             val deletePlayerTownStatement = connection.prepareStatement("DELETE FROM player_towns WHERE town_name = ?")
             deletePlayerTownStatement.setString(1, townName)
             deletePlayerTownStatement.executeUpdate()
@@ -351,7 +349,7 @@ class TownManager(private val databaseManager: DatabaseManager) {
         val connection = databaseManager.getConnection()
 
         try {
-            // Check if the chunk is claimed by the specified town
+
             val checkStatement = connection.prepareStatement("SELECT town_name FROM chunks_claimed WHERE chunk_x = ? AND chunk_z = ?")
             checkStatement.setInt(1, chunkX)
             checkStatement.setInt(2, chunkZ)
@@ -361,7 +359,7 @@ class TownManager(private val databaseManager: DatabaseManager) {
                 val claimingTown = resultSet.getString("town_name")
 
                 if (claimingTown == townName) {
-                    // Unclaim the chunk
+
                     val unclaimStatement = connection.prepareStatement("DELETE FROM chunks_claimed WHERE chunk_x = ? AND chunk_z = ?")
                     unclaimStatement.setInt(1, chunkX)
                     unclaimStatement.setInt(2, chunkZ)
@@ -508,6 +506,7 @@ class TownManager(private val databaseManager: DatabaseManager) {
 
         return emptyList()
     }
+    // this function is basically pointless btw lol
     fun getTownBalance(townName: String): Double {
         val connection = databaseManager.getConnection()
 
@@ -525,7 +524,7 @@ class TownManager(private val databaseManager: DatabaseManager) {
             connection.close()
         }
 
-        return 0.0 // Default balance if not found
+        return 0.0 
     }
 
     fun getAllTowns(): List<String> {
